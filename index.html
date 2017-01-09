@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+
+<head>
+  <script src="moment.js"></script>
+  <script src="committee.js"></script>
+  <style>
+    html.wait,
+    html.wait * {
+      cursor: wait !important;
+    }
+    
+    body {
+      border: 0;
+      margin: 0;
+      padding: 0;
+      background: black;
+      font-family: tty;
+      color: #e5fffc;
+      font-size: 0.8em;
+      background-color: #300a24;
+    }
+    
+    article {
+      text-indent: 20px;
+      display: block;
+    }
+    
+    article:first-line {
+      text-indent: 0;
+    }
+    
+    @font-face {
+      font-family: tty;
+      src: url('ub.ttf');
+    }
+    
+    #monitor {
+      position: absolute;
+      overflow: hidden;
+      top: 0;
+      left: 0;
+      width: 50vw;
+      max-width: 50%;
+      height: 100vh;
+      font-size: .9em;
+    }
+    
+    #ext {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50vw;
+      max-width: 50%;
+      height: 50vh;
+      overflow: hidden;
+      border-left: 1px solid #e5fffc;
+      border-bottom: 1px solid #e5fffc;
+      font-size: .8em;
+    }
+    
+    html {
+      box-sizing: border-box;
+    }
+    
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit;
+    }
+    
+    #det {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 50vw;
+      max-width: 50%;
+      height: 50vh;
+      overflow: hidden;
+      border-left: 1px solid #e5fffc;
+      font-size: 1.1em;
+    }
+    
+    .webshot {
+      position: absolute;
+      width: 100%;
+      height: auto;
+      overflow: hidden;
+      border: 0;
+      margin: 0;
+    }
+    
+    .imgtitle {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: rgba(229, 255, 252, 0.7);
+      color: #300a24;
+      z-index: 99;
+      font-size: 1.3em;
+    }
+    
+    .screen {
+      border: 1px solid #aaa;
+      position: relative;
+      height: 100vh;
+      width: 100vw;
+      max-width: 100%;
+    }
+    
+    .hearing {
+      position: relative;
+      min-height: 80px;
+      width: 100vw;
+      max-width: 100%;
+      border: 1px solid white;
+    }
+    
+    .hearing .title {
+      font-size: 1.2em;
+      color: orange;
+    }
+    
+    .hearing .date {}
+    
+    .orange {
+      background-color: rgba(255, 165, 0, 0.38);
+    }
+  </style>
+
+  <script src="socket.io-1.4.5.js"></script>
+</head>
+
+<body>
+  <section class="screen">
+    <section id="monitor">
+    </section>
+    <section id="ext">
+    </section>
+
+    <section id="det">
+    </section>
+  </section>
+
+</body>
+<script>
+  var monitor = document.querySelector('#monitor');
+
+  var ext = document.querySelector('#ext');
+  var det = document.querySelector('#det');
+
+  var socket = io('https://illegible.us:9080', { secure: true });
+  //var socket = io('138.197.195.36:9080');
+  socket.on('message', function (data) {
+    var art = document.createElement('article');
+    if (typeof data === "string") {
+      art.textContent = data;
+    } else {
+      art.textContent = JSON.stringify(data);
+      art.style.whiteSpace = "pre";
+    }
+    monitor.appendChild(art);
+    if (monitor.querySelectorAll('article').length > 200) {
+      monitor.removeChild(document.querySelector('article'));
+    }
+    monitor.scrollTop = monitor.scrollHeight;
+  });
+
+  socket.on('url', function (data) {
+    console.log(data);
+    var title, target, img;
+    ext.textContent = "";
+
+    if (data.title) {
+      title = data.title;
+      var titleDiv = document.createElement('div');
+      titleDiv.classList.add('imgtitle');
+      titleDiv.textContent = title;
+      ext.appendChild(titleDiv);
+    }
+    img = document.createElement('img');
+    img.classList.add('webshot');
+
+    ext.appendChild(img);
+    img.style.display = "block";
+    target = 'images/' + data.url + '.png';
+    img.src = target;
+    img.alt = target + title;
+
+  });
+
+
+  socket.on('txt', function (data) {
+    ext.textContent = data;
+  });
+
+  socket.on('detail', function (data) {
+    console.log(data);
+    var art = document.createElement('article');
+    if (typeof data === "string") {
+      art.textContent = data;
+    } else {
+      art.textContent = JSON.stringify(data);
+      art.style.whiteSpace = "pre";
+    }
+    det.appendChild(art);
+    if (det.querySelectorAll('article').length > 50) {
+      det.removeChild(document.querySelector('article'));
+    }
+    det.scrollTop = det.scrollHeight;
+  });
+
+
+  socket.once('connect', function () {
+    document.querySelector('html').classList.add("wait");
+  });
+
+  socket.on('disconnect', function () {
+    document.querySelector('html').classList.remove("wait");
+  });
+
+
+
+
+  Hearing.prototype.draw = function () {
+    var hearSecs = document.querySelectorAll('.hearing');
+    for (var i = 0; i < hearSecs.length; i++) {
+      if (hearSecs[i].dataset.shortdate === hearSecs) {
+        //it already exists, but might need to be updated?
+      } else {
+        var sec = document.createElement('section');
+        sec.classList.add('hearing');
+        sec.dataset.shortdate = this.shortdate;
+        var title = document.createElement('h1');
+        title.textContent = this.title;
+        sec.appendChild(title);
+        document.body.appendChild(sec);
+      }
+    }
+
+  };
+
+
+  var intel = new Committee({
+    committee: "Intelligence",
+    chamber: "senate",
+    url: "http://www.intelligence.senate.gov",
+    hearingIndex: "http://www.intelligence.senate.gov/hearings/open",
+    shortname: "intel"
+  });
+
+  socket.on('hearing', function (hearing) {
+    var hear = intel.addHearing(hearing);
+    hear.draw();
+  });
+</script>
+
+</html>
+

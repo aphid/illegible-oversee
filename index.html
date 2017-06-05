@@ -52,7 +52,7 @@
       right: 0;
       width: 50vw;
       max-width: 50%;
-      height: 50vh;
+      height: 75vh;
       overflow: hidden;
       border-left: 1px solid #e5fffc;
       border-bottom: 1px solid #e5fffc;
@@ -75,7 +75,7 @@
       right: 0;
       width: 50vw;
       max-width: 50%;
-      height: 50vh;
+      height: 25vh;
       overflow: hidden;
       border-left: 1px solid #e5fffc;
       font-size: 1.1em;
@@ -128,7 +128,7 @@
     }
   </style>
 
-  <script src="socket.io-1.4.5.js"></script>
+  <script src="lib/socket.io-1.4.5.js"></script>
 </head>
 
 <body>
@@ -205,7 +205,7 @@
     }
     det.appendChild(art);
     if (det.querySelectorAll('article').length > 50) {
-      det.removeChild(document.querySelector('article'));
+      det.removeChild(document.querySelectorAll('article')[0]);
     }
     det.scrollTop = det.scrollHeight;
   });

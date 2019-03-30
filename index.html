@@ -2,149 +2,11 @@
 <html>
 
 <head>
-  <script src="moment.min.js"></script>
+  <script src="lib/moment.min.js"></script>
   <script src="committee.js"></script>
-  <style>
-    html.wait,
-    html.wait * {
-      cursor: wait !important;
-    }
-    
-    body {
-      border: 0;
-      margin: 0;
-      padding: 0;
-      background: black;
-      font-family: tty;
-      color: #e5fffc;
-      font-size: 0.8em;
-      background-color: #300a24;
-    }
-    #stats {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	margin: 0;
-	padding: 0;
-	height: 20px;
-        background: rgba(4,25,1,0.3);
-	border-bottom: 1px solid #999;
-    
-    }
-    section { box-sizing: border-box; } 
-      
-    article {
-      text-indent: 20px;
-      display: block;
-    }
-    
-    article:first-line {
-      text-indent: 0;
-    }
-    
-    @font-face {
-      font-family: tty;
-      src: url('ub.ttf');
-    }
-    
-    #monitor {
-      position: absolute;
-      overflow: hidden;
-      top: 0;
-      left: 0;
-      width: 50vw;
-      max-width: 50%;
-      height: 100vh;
-      font-size: .9em;
-      padding-top: 20px;
-      box-sizing: border-box;
-    }
-    
-    #ext {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 50vw;
-      max-width: 50%;
-      height: 75vh;
-      overflow: hidden;
-      border-left: 1px solid #e5fffc;
-      border-bottom: 1px solid #e5fffc;
-      font-size: .8em;
-    }
-    
-    html {
-      box-sizing: border-box;
-    }
-    
-    *,
-    *:before,
-    *:after {
-      box-sizing: inherit;
-    }
-    
-    #det {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 50vw;
-      max-width: 50%;
-      height: 25vh;
-      overflow: hidden;
-      border-left: 1px solid #e5fffc;
-      font-size: 1.1em;
-    }
-    
-    .webshot {
-      position: absolute;
-      width: 100%;
-      height: auto;
-      overflow: hidden;
-      border: 0;
-      margin: 0;
-    }
-    
-    .imgtitle {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      background: rgba(229, 255, 252, 0.7);
-      color: #300a24;
-      z-index: 99;
-      font-size: 1.3em;
-    }
-    
-    .screen {
-      border: 1px solid #aaa;
-      box-style: border-box;
-      position: relative;
-      height: 100vh;
-      width: 100vw;
-      max-width: 100%;
-    }
-    
-    .hearing {
-      position: relative;
-      min-height: 80px;
-      width: 100vw;
-      max-width: 100%;
-      border: 1px solid white;
-    }
-    
-    .hearing .title {
-      font-size: 1.2em;
-      color: orange;
-    }
-    
-    .hearing .date {}
-    
-    .orange {
-      background-color: rgba(255, 165, 0, 0.38);
-    }
-  </style>
-
-  <script src="lib/socket.io.slim.js"></script>
+ 
+  <link rel="stylesheet" href="style.css" type="text/css">
+  <script src="lib/socket.io.dev.js"></script>
 </head>
 
 <body>
@@ -160,13 +22,14 @@
   </section>
 
 </body>
-<script>
+<script src="ssci.js"></script>
+<script>/*
   var monitor = document.querySelector('#monitor');
 
   var ext = document.querySelector('#ext');
   var det = document.querySelector('#det');
 
-  var socket = io('https://oversightmachin.es:9080', { secure: true });
+  var socket = io(':9080', { secure: true });
   socket.on('message', function (data) {
     var art = document.createElement('article');
     if (typeof data === "string") {
@@ -277,7 +140,7 @@
   socket.on('hearing', function (hearing) {
     var hear = intel.addHearing(hearing);
     hear.draw();
-  });
+  }); */
 </script>
 
 </html>

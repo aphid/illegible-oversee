@@ -13,7 +13,20 @@ body {
   font-size: 0.8em;
   background-color: #300a24;
 }
+#stats {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+margin: 0;
+padding: 0;
+height: 20px;
+    background: rgba(4,25,1,0.3);
+border-bottom: 1px solid #999;
 
+}
+section { box-sizing: border-box; } 
+  
 article {
   text-indent: 20px;
   display: block;
@@ -37,6 +50,8 @@ article:first-line {
   max-width: 50%;
   height: 100vh;
   font-size: .9em;
+  padding-top: 20px;
+  box-sizing: border-box;
 }
 
 #ext {
@@ -95,6 +110,7 @@ html {
 
 .screen {
   border: 1px solid #aaa;
+  box-style: border-box;
   position: relative;
   height: 100vh;
   width: 100vw;

@@ -73,12 +73,14 @@
          art.style.whiteSpace = "pre";
      }
      det.appendChild(art);
-     if (det.querySelectorAll('article').length > 50) {
-         det.removeChild(document.querySelectorAll('article')[0]);
+     if (det.querySelectorAll('article').length > 20) {
+         det.removeChild(det.firstChild);
      }
      det.scrollTop = det.scrollHeight;
  });
 
+
+ 
 
  socket.once('connect', function () {
      document.querySelector('html').classList.add("wait");

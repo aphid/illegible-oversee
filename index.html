@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <script src="moment.js"></script>
+  <script src="moment.min.js"></script>
   <script src="committee.js"></script>
   <style>
     html.wait,
@@ -20,7 +20,20 @@
       font-size: 0.8em;
       background-color: #300a24;
     }
+    #stats {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	height: 20px;
+        background: rgba(4,25,1,0.3);
+	border-bottom: 1px solid #999;
     
+    }
+    section { box-sizing: border-box; } 
+      
     article {
       text-indent: 20px;
       display: block;
@@ -44,6 +57,8 @@
       max-width: 50%;
       height: 100vh;
       font-size: .9em;
+      padding-top: 20px;
+      box-sizing: border-box;
     }
     
     #ext {
@@ -102,6 +117,7 @@
     
     .screen {
       border: 1px solid #aaa;
+      box-style: border-box;
       position: relative;
       height: 100vh;
       width: 100vw;
@@ -128,11 +144,12 @@
     }
   </style>
 
-  <script src="lib/socket.io-1.4.5.js"></script>
+  <script src="lib/socket.io.slim.js"></script>
 </head>
 
 <body>
   <section class="screen">
+	  <section id="stats"></section>
     <section id="monitor">
     </section>
     <section id="ext">
@@ -149,8 +166,7 @@
   var ext = document.querySelector('#ext');
   var det = document.querySelector('#det');
 
-  var socket = io('https://illegible.us:9080', { secure: true });
-  //var socket = io('138.197.195.36:9080');
+  var socket = io('https://oversightmachin.es:9080', { secure: true });
   socket.on('message', function (data) {
     var art = document.createElement('article');
     if (typeof data === "string") {
@@ -161,16 +177,15 @@
     }
     monitor.appendChild(art);
     if (monitor.querySelectorAll('article').length > 200) {
-      monitor.removeChild(document.querySelector('article'));
+      monitor.removeChild(monitor.querySelector('article'));
     }
     monitor.scrollTop = monitor.scrollHeight;
   });
 
   socket.on('url', function (data) {
-    console.log(data);
+    //console.log(data);
     var title, target, img;
     ext.textContent = "";
-
     if (data.title) {
       title = data.title;
       var titleDiv = document.createElement('div');
@@ -183,19 +198,29 @@
 
     ext.appendChild(img);
     img.style.display = "block";
-    target = 'images/' + data.url + '.png';
+    if (data.url.includes("jpg") || data.url.includes("png")){
+      target = data.url;
+      console.log(data.url);	
+    } else {
+    target = 'images/' + data.url + '.jpg';
+    }
     img.src = target;
-    img.alt = target + title;
+    img.alt = target + "_" + title;
 
   });
 
+  socket.on('load', function(data){
+
+    window.location.assign(data);
+
+ });
 
   socket.on('txt', function (data) {
     ext.textContent = data;
   });
 
   socket.on('detail', function (data) {
-    console.log(data);
+    //console.log(data);
     var art = document.createElement('article');
     if (typeof data === "string") {
       art.textContent = data;
@@ -204,8 +229,8 @@
       art.style.whiteSpace = "pre";
     }
     det.appendChild(art);
-    if (det.querySelectorAll('article').length > 50) {
-      det.removeChild(document.querySelectorAll('article')[0]);
+    if (det.querySelectorAll('article').length > 10) {
+      det.removeChild(det.querySelectorAll('article')[0]);
     }
     det.scrollTop = det.scrollHeight;
   });

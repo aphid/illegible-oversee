@@ -64,7 +64,7 @@
  });
 
  socket.on('detail', function (data) {
-     console.log(data);
+     //console.log(data);
      var art = document.createElement('article');
      if (typeof data === "string") {
          art.textContent = data;
@@ -79,8 +79,30 @@
      det.scrollTop = det.scrollHeight;
  });
 
+ socket.on('progress', function (data) {
+     console.log(data);
+     var target = document.querySelector("#" + data.id);
+     if (!target) {
+         var art = document.createElement("article");
+         var tit = document.createElement("label");
+         tit.textContent = data.id + " download %";
+         tit.setAttribute("for", data.id)
+         var prog = document.createElement("progress");
+         prog.setAttribute("id", data.id);
+         prog.setAttribute("max", 100);
+         prog.setAttribute("value", 0);
+         art.appendChild(tit);
+         art.appendChild(prog);
+         monitor.appendChild(art);
+         target = document.querySelector("#" + data.id);
+     }
+     target.value = data.pct;
+     monitor.scrollTop = monitor.scrollHeight;
 
- 
+
+
+ });
+
 
  socket.once('connect', function () {
      document.querySelector('html').classList.add("wait");

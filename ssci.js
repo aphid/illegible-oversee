@@ -53,8 +53,9 @@
      img.style.display = "block";
      target = imagepath + data.url + '.jpg';
      console.log(target);
-     img.src = target;
+     img.src = target + "?" + new Date().getTime(); 
      img.alt = target + title;
+     img.load
 
  });
 
@@ -80,7 +81,7 @@
  });
 
  socket.on('progress', function (data) {
-     console.log(data);
+     //console.log(data);
      var target = document.querySelector("#" + data.id);
      if (!target) {
          var art = document.createElement("article");

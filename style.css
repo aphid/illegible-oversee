@@ -13,6 +13,11 @@ body {
   font-size: 0.8em;
   background-color: #300a24;
 }
+.err {
+  font-weight: bold;
+  color: orange;
+}
+
 #stats {
 position: absolute;
 top: 0;

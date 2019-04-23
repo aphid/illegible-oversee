@@ -34,6 +34,22 @@
      monitor.scrollTop = monitor.scrollHeight;
  });
 
+ socket.on('err', function (data) {
+     var art = document.createElement('article');
+     art.classList.add("err");
+     if (typeof data === "string") {
+         art.textContent = data;
+     } else {
+         art.textContent = JSON.stringify(data);
+         art.style.whiteSpace = "pre";
+     }
+     monitor.appendChild(art);
+     if (monitor.querySelectorAll('article').length > 200) {
+         monitor.removeChild(document.querySelector('article'));
+     }
+     monitor.scrollTop = monitor.scrollHeight;
+ });
+
  socket.on('url', function (data) {
      console.log(data);
      var title, target, img;

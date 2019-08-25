@@ -67,7 +67,11 @@
 
      ext.appendChild(img);
      img.style.display = "block";
-     target = imagepath + data.url + '.jpg';
+     if (data.url.includes(".jpg")){
+         target = imagepath + data.url;
+     } else { 
+         target = imagepath + data.url + '.jpg';
+     }
      console.log(target);
      img.src = target + "?" + new Date().getTime(); 
      img.alt = target + title;

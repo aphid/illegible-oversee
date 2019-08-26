@@ -1,143 +1,144 @@
- var monitor = document.querySelector('#monitor');
+var monitor = document.querySelector('#monitor');
 
- var ext = document.querySelector('#ext');
- var det = document.querySelector('#det');
+var ext = document.querySelector('#ext');
+var det = document.querySelector('#det');
 
- var remoteUrl = "https://illegible.us:9080";
- var localUrl = "localhost:9080";
- var imagepath = "images/"
- var url = remoteUrl;
- var useSecure = true;
- if (window.location.hostname === "localhost") {
-     url = localUrl;
-     useSecure = false;
-     imagepath = "../oversee/images/";
- }
- var socket = io(url, {
-     secure: useSecure
- });
- console.log(socket);
+var remoteUrl = "https://illegible.us:9080";
+var localUrl = "localhost:9080";
+var imagepath = "images/"
+var url = remoteUrl;
+var useSecure = true;
+if (window.location.hostname === "localhost") {
+    url = localUrl;
+    useSecure = false;
+    imagepath = "../oversee/images/";
+}
+var socket = io(url, {
+    secure: useSecure
+});
+console.log(socket);
 
- //var socket = io('138.197.195.36:9080');
- socket.on('message', function (data) {
-     var art = document.createElement('article');
-     if (typeof data === "string") {
-         art.textContent = data;
-     } else {
-         art.textContent = JSON.stringify(data);
-         art.style.whiteSpace = "pre";
-     }
-     monitor.appendChild(art);
-     if (monitor.querySelectorAll('article').length > 200) {
-         monitor.removeChild(document.querySelector('article'));
-     }
-     monitor.scrollTop = monitor.scrollHeight;
- });
+//var socket = io('138.197.195.36:9080');
+socket.on('message', function (data) {
+    var art = document.createElement('article');
+    if (typeof data === "string") {
+        art.textContent = data;
+    } else {
+        art.textContent = JSON.stringify(data);
+        art.style.whiteSpace = "pre";
+    }
+    monitor.appendChild(art);
+    if (monitor.querySelectorAll('article').length > 200) {
+        monitor.removeChild(document.querySelector('article'));
+    }
+    monitor.scrollTop = monitor.scrollHeight;
+});
 
- socket.on('err', function (data) {
-     var art = document.createElement('article');
-     art.classList.add("err");
-     if (typeof data === "string") {
-         art.textContent = data;
-     } else {
-         art.textContent = JSON.stringify(data);
-         art.style.whiteSpace = "pre";
-     }
-     monitor.appendChild(art);
-     if (monitor.querySelectorAll('article').length > 200) {
-         monitor.removeChild(document.querySelector('article'));
-     }
-     monitor.scrollTop = monitor.scrollHeight;
- });
+socket.on('err', function (data) {
+    var art = document.createElement('article');
+    art.classList.add("err");
+    if (typeof data === "string") {
+        art.textContent = data;
+    } else {
+        art.textContent = JSON.stringify(data);
+        art.style.whiteSpace = "pre";
+    }
+    monitor.appendChild(art);
+    if (monitor.querySelectorAll('article').length > 200) {
+        monitor.removeChild(document.querySelector('article'));
+    }
+    monitor.scrollTop = monitor.scrollHeight;
+});
 
- socket.on('url', function (data) {
-     console.log(data);
-     var title, target, img;
-     ext.textContent = "";
+socket.on('url', function (data) {
+    console.log(data);
+    var title, target, img;
+    ext.textContent = "";
 
-     if (data.title) {
-         title = data.title;
-         var titleDiv = document.createElement('div');
-         titleDiv.classList.add('imgtitle');
-         titleDiv.textContent = title;
-         ext.appendChild(titleDiv);
-     }
-     img = document.createElement('img');
-     img.classList.add('webshot');
+    if (data.title) {
+        title = data.title;
+        var titleDiv = document.createElement('div');
+        titleDiv.classList.add('imgtitle');
+        titleDiv.textContent = title;
+        ext.appendChild(titleDiv);
+    }
+    img = document.createElement('img');
+    img.classList.add('webshot');
 
-     ext.appendChild(img);
-     img.style.display = "block";
-     if (!data.url.includes("http")){
+    ext.appendChild(img);
+    img.style.display = "block";
+    console.log("path:", imagepath, "url:", data.url);
+    if (data.url.includes("http")) {
         target = data.url;
-     } else {
-	target = imagepath + data.url;
-     }
+    } else {
+        target = imagepath + data.url;
+    }
 
-     if (!data.url.includes(".jpg")){
-         target = target + ".jpg";
-     }
-     console.log(target);
-     img.src = target + "?" + new Date().getTime(); 
-     img.alt = target + title;
-     img.load
+    if (!data.url.includes(".jpg")) {
+        target = target + ".jpg";
+    }
+    console.log(target);
+    img.src = target + "?" + new Date().getTime();
+    img.alt = target + title;
+    img.load
 
- });
-
-
- socket.on('txt', function (data) {
-     ext.textContent = data;
- });
-
- socket.on('detail', function (data) {
-     //console.log(data);
-     var art = document.createElement('article');
-     if (typeof data === "string") {
-         art.textContent = data;
-     } else {
-         art.textContent = JSON.stringify(data);
-         art.style.whiteSpace = "pre";
-     }
-     det.appendChild(art);
-     if (det.querySelectorAll('article').length > 20) {
-         det.removeChild(det.firstChild);
-     }
-     det.scrollTop = det.scrollHeight;
- });
-
- socket.on('progress', function (data) {
-     //console.log(data);
-     var target = document.querySelector("#" + data.id);
-     if (!target) {
-         var art = document.createElement("article");
-         var tit = document.createElement("label");
-         tit.textContent = data.id + " download %";
-         tit.setAttribute("for", data.id)
-         var prog = document.createElement("progress");
-         prog.setAttribute("id", data.id);
-         prog.setAttribute("max", 100);
-         prog.setAttribute("value", 0);
-         art.appendChild(tit);
-         art.appendChild(prog);
-         monitor.appendChild(art);
-         target = document.querySelector("#" + data.id);
-     }
-     target.value = data.pct;
-     monitor.scrollTop = monitor.scrollHeight;
+});
 
 
+socket.on('txt', function (data) {
+    ext.textContent = data;
+});
 
- });
+socket.on('detail', function (data) {
+    //console.log(data);
+    var art = document.createElement('article');
+    if (typeof data === "string") {
+        art.textContent = data;
+    } else {
+        art.textContent = JSON.stringify(data);
+        art.style.whiteSpace = "pre";
+    }
+    det.appendChild(art);
+    if (det.querySelectorAll('article').length > 20) {
+        det.removeChild(det.firstChild);
+    }
+    det.scrollTop = det.scrollHeight;
+});
+
+socket.on('progress', function (data) {
+    //console.log(data);
+    var target = document.querySelector("#" + data.id);
+    if (!target) {
+        var art = document.createElement("article");
+        var tit = document.createElement("label");
+        tit.textContent = data.id + " download %";
+        tit.setAttribute("for", data.id)
+        var prog = document.createElement("progress");
+        prog.setAttribute("id", data.id);
+        prog.setAttribute("max", 100);
+        prog.setAttribute("value", 0);
+        art.appendChild(tit);
+        art.appendChild(prog);
+        monitor.appendChild(art);
+        target = document.querySelector("#" + data.id);
+    }
+    target.value = data.pct;
+    monitor.scrollTop = monitor.scrollHeight;
 
 
- socket.once('connect', function () {
-     document.querySelector('html').classList.add("wait");
- });
 
- socket.on('disconnect', function () {
-     document.querySelector('html').classList.remove("wait");
- });
+});
 
 
+socket.once('connect', function () {
+    document.querySelector('html').classList.add("wait");
+});
+
+socket.on('disconnect', function () {
+    document.querySelector('html').classList.remove("wait");
+});
+
+/*
  Hearing.prototype.draw = function () {
      var hearSecs = document.querySelectorAll('.hearing');
      for (var i = 0; i < hearSecs.length; i++) {
@@ -164,8 +165,10 @@
      shortname: "intel"
  });
 
- socket.on('hearing', function (hearing) {
-     console.log("new hearing");
-     var hear = intel.addHearing(hearing);
-     hear.draw();
- });
+socket.on('hearing', function (hearing) {
+    console.log("new hearing");
+    var hear = intel.addHearing(hearing);
+    hear.draw();
+});
+
+*/

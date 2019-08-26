@@ -67,10 +67,14 @@
 
      ext.appendChild(img);
      img.style.display = "block";
-     if (data.url.includes(".jpg")){
-         target = imagepath + data.url;
-     } else { 
-         target = imagepath + data.url + '.jpg';
+     if (!data.url.includes("http")){
+        target = data.url;
+     } else {
+	target = imagepath + data.url;
+     }
+
+     if (!data.url.includes(".jpg")){
+         target = target + ".jpg";
      }
      console.log(target);
      img.src = target + "?" + new Date().getTime(); 
@@ -161,6 +165,7 @@
  });
 
  socket.on('hearing', function (hearing) {
+     console.log("new hearing");
      var hear = intel.addHearing(hearing);
      hear.draw();
  });

@@ -10,7 +10,7 @@ body {
   background: black;
   font-family: tty;
   color: #e5fffc;
-  font-size: 0.8em;
+  font-size: 1em;
   background-color: #300a24;
 }
 .err {
@@ -54,7 +54,7 @@ article:first-line {
   width: 50vw;
   max-width: 50%;
   height: 98vh;
-  font-size: .9em;
+  font-size: 1em;
   padding-top: 20px;
   box-sizing: border-box;
 }
@@ -69,7 +69,7 @@ article:first-line {
   overflow: hidden;
   border-left: 1px solid #e5fffc;
   border-bottom: 1px solid #e5fffc;
-  font-size: .8em;
+  font-size: 1em;
 }
 
 html {
